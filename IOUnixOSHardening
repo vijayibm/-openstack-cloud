@@ -113,17 +113,6 @@ if [ ! -f /etc/resolv.conf-org ]; then
 cp   /etc/resolv.conf /etc/resolv.conf-org
 fi
 
-cat  > /etc/resolv.conf << 'EOF' 
-search ds.newsint. newsint.co.uk. wpng.newsint.co.uk. ni.ad.newsint. se.newsint.co.uk. do.newsint.co.uk.
-nameserver 10.194.1.83 
-nameserver  10.194.194.103 
-nameserver  10.194.194.104
-nameserver  10.194.194.105
-nameserver  10.194.194.188
-EOF
-echo -e "[\e[32m Done \e[0m]"
-}
-
 ldap_client() {
 printf "%-50s\t   " "LDAP Client Configuration"
 sleep 2
@@ -131,30 +120,6 @@ sleep 2
 if [ ! -f /etc/ldap.conf-org ]; then
 cp   /etc/ldap.conf /etc/ldap.conf-org
 fi
-
-cat > /etc/ldap.conf << 'EOF'
-uri     ldap://pvlolxdsa.ds.newsint
-base    ou=ds,o=newsint
-ldap_version    3
-bind_policy     soft
-binddn  cn=proxyagent,ou=profile,ou=ds,o=newsint
-bindpw  poxypassword
-scope   sub
-timelimit       30
-bind_timelimit  30
-pam_lookup_policy       yes
-pam_password exop
-nss_base_passwd ou=People,ou=ds,o=newsint
-nss_base_shadow ou=People,ou=ds,o=newsint
-nss_base_group  ou=Group,ou=ds,o=newsint
-nss_map_attribute       uniqueMember member
-pam_filter      objectclass=posixAccount
-ssl     no
-tls_checkpeer   no
-EOF
-authconfig-tui --enableldap --enableldapauth --ldapserver=pvlolxdsa.ds.newsint --kickstart
-echo -e "[\e[32m Done \e[0m]"
-}
 
 user() {
 id -a sysmaintain  &> /dev/null
@@ -169,23 +134,10 @@ fi
 chmod 700 /home/sysmaintain/.ssh
 chown sysmaintain:sysmaintain /home/sysmaintain/.ssh
 cat > /home/sysmaintain/.ssh/authorized_keys << 'EOF'
-ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAo+5fQJz5l65sNtjifeiXZZJaY8F+0HPLlX+sNqc+rwd0HLmYmnCRZAOqgths5QWCGDo8d1OlKj4xGeonI2gNVVwsvCVlugqjcQ9dtpKegT30wBdqHTP72DMQCOJS2iwVMG0O8GBgV1TOFIBg8XzV6HsihnngdHBRo1sEf3YKtNtYb5Gk2qYFAxdYCDVrBgoZc/4cNEraRms2t3qgAWdLvGihItyypvbHs3B5l5XW2dv4WUmI9LDuXrJXRXflmGd5IMyoDooXANmrz+Q8zFx1myY660MtMb/pKvR9mnHKuR70JFpMTZdEAnsxh6kC7tInmvGKZvY6kHvL8pjFdwBqhQ== hclsys@itsrv1
+ssh-rsa AAAAB3NzaC1yc2EAAAABIwAAAQEAo+5fQJz5l65sNtjifeiXZZJaY8F+0HPLlX+sNqc+rwd0HLmYmnCRZAOqgths5QWCGDo8d1OlKj4xGeonI2gNVVwsvCVlugqjcQ9dtpKegT30wBdqHTP72DMQCOJS2iwVMG0O8GBgV1TOFIBg8XzV6HsihnngdHBRo1sEf3YKtNtYb5Gk2qYFAxdYCDVrBgoZc/4cNEraRms2t3qgAWdLvGihItyypvbHs3B5l5XW2dv4WUmI9LDuXrJXRXflmGd5IMyoDooXANmrz+Q8zFx1myY660MtMb/pKvR9mnHKuR70JFpMTZdEAnsxh6kC7tInmvGKZvY6kHvL8pjFd==
 EOF
 chmod 600 /home/sysmaintain/.ssh/authorized_keys
 chown sysmaintain:sysmaintain /home/sysmaintain/.ssh/authorized_keys
-}
-
-mail_relay() {
-printf "%-50s\t   " "Mail Relay Configuartion"
-grep -w news /etc/postfix/main.cf &> /dev/null
-if [ $? -ne 0 ]
-then
-cp  /etc/postfix/main.cf /etc/postfix/main.cf-org
-echo "relayhost = smtprelay1.ni.ad.newsint" >> /etc/postfix/main.cf
-echo "relayhost = 10.194.35.232" >> /etc/postfix/main.cf
-echo "myorigin = news.co.uk" >> /etc/postfix/main.cf
-fi
-echo -e "[\e[32m Done \e[0m]"
 }
 
 iounix() {
@@ -200,7 +152,7 @@ cat > /etc/init.d/IOunixnotify << 'EOF'
 
 #       Alert IOUNIX that somebody has rebooted
 
-MAILTO="iounixteam@news.co.uk"
+MAILTO="vijay.240385@gmail.com"
 
 # Start/stop
 
